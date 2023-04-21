@@ -1,12 +1,6 @@
 import models, {sequelize} from "../models/init-models.js"
 import bcrypt from 'bcrypt'
 
-/*
-    PR: 
-    buat validation function
-    buat multer
-*/
-
 
 const passwordValidation = (password) => {
     const validationLowerCase = /[a-z]/
@@ -35,22 +29,16 @@ const passwordValidation = (password) => {
 const createUsers = async(req,res) => {
     try {
         //validate password
-        // const password = passwordValidation(req.body.password)
+        const password = passwordValidation(req.body.password)
 
         let salt = await bcrypt.genSalt(10)
-        let passHash = await bcrypt.hash(req.body.password, salt)
+        let passHash = await bcrypt.hash(password, salt)
         req.body.password = passHash;
 
         const data = `[${JSON.stringify(req.body)}]`;
     
         const query = `CALL insertUserCustomer('${data}')`;
         const result = await sequelize.query(query);
-
-        // const result = await models.users.create({
-        //     username: req.body.usrname,
-        //     password: passHash
-        // })
-        // console.log();
 
         res.status(200).json({
             message: 'success',
