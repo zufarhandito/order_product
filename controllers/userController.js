@@ -64,10 +64,10 @@ const getUsers = async(req,res) => {
             data: result
         })
     } catch (error) {
-        res.status(404).json({
-            message: error.message,
-            status: 404
-        })
+        // res.status(404).json({
+        //     message: error.message,
+        //     status: 404
+        // })
     }
 }
 

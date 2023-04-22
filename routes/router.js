@@ -6,13 +6,15 @@ import productController from "../controllers/productController.js";
 import productCategoryController from "../controllers/productCategoryController.js";
 import orderDetailsController from "../controllers/orderDetailsController.js";
 import customerController from "../controllers/customerController.js";
+import auth from "../middleware/auth.js";
 
 const router = Router()
+
 
 /*
 route untuk users. 
 */
-router.get('/user', userController.getUsers)
+router.get('/user',auth.verifyLogin,userController.getUsers)
 
 router.get('/user/:id', userController.getUserById)
 
