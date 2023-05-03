@@ -19,14 +19,13 @@ const upload = multer({
         const fileTypes = /jpeg|jpg|png|gif/;
         const mimeType = fileTypes.test(file.mimetype);
         const extname = fileTypes.test(path.extname(file.originalname))
-
+ 
         if(mimeType && extname){
             return cb(null,true)
         }
         cb("Format file salah")
     }
 }).single("image")
-
 
 const getProducts = async(req,res) => {
     try {

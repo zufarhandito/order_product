@@ -51,17 +51,15 @@ const getCustomerById = async(req,res) => {
 
 const createCustomer = async(req,res) => {
     try {
-        const {firstname,lastname,user_id} = req.body
-        const data = await models.customers.create({
-            firstname: firstname,
-            lastname: lastname,
-            user_id: user_id
-        })
+        // const {firstname,lastname,user_id} = req.body
+        // const data = await models.customers.create({
+        //     firstname: firstname,
+        //     lastname: lastname,
+        //     user_id: user_id
+        // })
 
         res.status(200).json({
-            message: 'success',
-            status: 200,
-            data: data
+            message: 'lewat user dong bang'
         })
 
     } catch (error) {
@@ -73,24 +71,23 @@ const createCustomer = async(req,res) => {
 
 const updateCustomer = async(req,res) => {
     try {
-        const data = await models.customers.findByPk(req.params.id)
-        if(!data) throw new Error("Data tidak ditemukan")
+        // const data = await models.customers.findByPk(req.params.id)
+        // if(!data) throw new Error("Data tidak ditemukan")
 
-        const {firstname,lastname,user_id} = req.body
-        await models.customers.update({
-            firstname: firstname,
-            lastname: lastname,
-            user_id: user_id
-        },{
-            where: {
-                id: req.params.id   
-            }
-        })
+        // const {firstname,lastname,user_id} = req.body
+        // await models.customers.update({
+        //     firstname: firstname,
+        //     lastname: lastname,
+        //     user_id: user_id
+        // },{
+        //     where: {
+        //         id: req.params.id   
+        //     }
+        // })
 
         res.status(200).json({
-            message: 'success',
-            status: 200,
-            data: data
+            message: 'lewat user dong bang',
+            status: 200
         })
     } catch (error) {
         res.status(404).json({
@@ -101,17 +98,17 @@ const updateCustomer = async(req,res) => {
 
 const deleteCustomer = async(req,res) => {
     try {
-        const data = await models.customers.findByPk(req.params.id)
-        if(!data) throw new Error("Data tidak ditemukan")
+        // const data = await models.customers.findByPk(req.params.id)
+        // if(!data) throw new Error("Data tidak ditemukan")
 
-        await models.customers.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
+        // await models.customers.destroy({
+        //     where: {
+        //         id: req.params.id
+        //     }
+        // })
 
         res.status(200).json({
-            message: 'Data berhasil dihapus',
+            message: 'lewat user dong bang',
         })
     } catch (error) {
         res.status(404).json({

@@ -20,11 +20,11 @@ export default class orders extends Model {
     },
     totalproduct: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     totalprice: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: true
     },
     createdat: {
       type: DataTypes.DATE,

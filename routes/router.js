@@ -15,13 +15,9 @@ const router = Router()
 route untuk users. 
 */
 router.get('/user',auth.verifyLogin,userController.getUsers)
-
 router.get('/user/:id', userController.getUserById)
-
 router.post('/user', userController.createUsers)
-
 router.delete('/user/:id',userController.deleteUser)
-
 router.patch('/user/:id', userController.updateUsers)
 
 /*
@@ -39,9 +35,7 @@ route untuk product category
 */
 
 router.get('/categories',productCategoryController.getCategories)
-
 router.get('/categories/:id',productCategoryController.getCategoryById)
-
 router.post('/categories',productCategoryController.createCategory)
 
 /*
@@ -69,13 +63,9 @@ route untuk order
 */
 
 router.get('/orders', orderController.getOrders)
-
 router.get('/orders/:id', orderController.getOrderById)
-
 router.post('/orders', orderController.createOrder)
-
 router.patch('/orders/:id',orderController.updateOrder)
-
 router.delete('/orders/:id',orderController.deleteOrder)
 
 

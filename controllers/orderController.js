@@ -1,4 +1,4 @@
-import models from "../models/init-models.js"
+import models, {sequelize} from "../models/init-models.js"
 
 const getOrders = async(req,res) => {
     try {
@@ -20,7 +20,8 @@ const getOrders = async(req,res) => {
 
 const getOrderById = async(req,res) => {
     try {
-        const data = await models.orders.findByPk(req.params.id)
+
+        const data = await models.orders.findByPk(datanya)
         if(!data) throw new Error ("Data order yang anda cari tidak ditemukan")
 
         res.status(200).json({
@@ -35,38 +36,43 @@ const getOrderById = async(req,res) => {
         })
     }
 }
-
 const createOrder = async(req,res) => {
     try {
-        const data = await models.orders.create({
-            user_id: req.body.user_id,
-            totalproduct: req.body.totalproduct,
-            totalprice: req.body.totalprice
-        })
+        let user_id = 0
+        let totalprice = 0
+        let totalproduct = 0
+        for(let i in req.body) {
+            user_id= req.body[i].user_id;
+            totalproduct += req.body[i].quantity;
+            totalprice += (req.body[i].price * req.body[i].quantity)
+        }
+        let data = {
+            user_id: user_id,
+            totalproduct: totalproduct,
+            totalprice: totalprice
+        }
 
-        res.status(200).json({
-            message: 'success',
-            status: 200,
-            data: data
-        })
+        console.log(totalproduct);
+        const data1 = `[${JSON.stringify(data)}]`
+        const data2 = `${JSON.stringify(req.body)}`
 
-    } catch (error) {
-        res.status(400).json({
-            message: error.message,
-            status: 400,
-        })
+        await sequelize.query(`CALL InsertOrderxDetail('${data1}','${data2}')`);
+
+        res.send('berhasil')
+
+    } catch (error) {   
+        res.send(error.message)
     }
 }
 
 const updateOrder = async(req,res) => {
     try {
-
         const findId = await models.orders.findByPk(req.params.id);
         if(!findId) throw new Error ("Data yang anda cari tidak ada");
 
         const { user_id, totalproduct, totalprice } = req.body
 
-        const data = await models.orders.update({
+        await models.orders.update({
             user_id: user_id,
             totalproduct: totalproduct,
             totalprice: totalprice

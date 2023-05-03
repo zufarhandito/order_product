@@ -28,7 +28,7 @@ export default class order_details extends Model {
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     createdat: {
       type: DataTypes.DATE,
