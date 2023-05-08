@@ -107,9 +107,6 @@ const createProduct = async(req,res) => {
 
 const updateProduct = async(req,res) => {
     try {
-        const findId = await models.products.findByPk(req.params.id);
-        if(!findId) throw new Error('Product tidak ditemukan')
-
         const {name, description, category_id, price} = req.body
 
         let getImage = findId.image
@@ -128,12 +125,16 @@ const updateProduct = async(req,res) => {
         },{
             where: {
                 id: req.params.id
-            }
+            },
+            returning: true
         })
+
+        if(data[i].length === 0) throw new Error("Gagal update! cek ID")
 
         res.status(201).json({
             message: "success",
-            status: 201
+            status: 201,
+            data: data
         })
     } catch (error) {
         res.status(400).json({

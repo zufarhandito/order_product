@@ -10,13 +10,13 @@ const getCategories = async(req,res) => {
             status: 200,
             data: data
         })
+
     } catch (error) {
         res.status(404).json({
             message: error.message
         })
     }
 }
-
 
 const getCategoryById = async(req,res) => {
     try {
@@ -57,22 +57,28 @@ const createCategory = async(req,res) => {
 
 const updateCategory = async(req,res) => {
     try {
-        const findId = await models.product_categories.findByPk(req.params.id)
-        if(!findId) throw new Error('kategori tidak ditemukan')
-
         const {name, description} = req.body
-        await models.product_categories.update({
+        const data = await models.product_categories.update({
             name,
             description
         },{
             where: {
                 id: req.params.id
-            }
+            },
+            returning: true
         })
 
-        res.send('sukses')
+        if(data[1].length === 0) throw new Error('Gagal Input. cek ID')
+
+        res.json({
+            message: 'sukses',
+            data: data
+        })
     } catch (error) {
-        res.send(error.message)
+        res.json({
+            status: 'failed',
+            message: error.message
+        })
     }
 }
 
