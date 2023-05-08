@@ -4,7 +4,7 @@ const sequelize = new Sequelize(
   process.env.DB_USER,
   process.env.DB_PASSWORD,
   {
-    dialect: "postgresql",
+    dialect: "postgres",
     pool: {
       max: 5,
       min: 0,
@@ -21,6 +21,7 @@ import _order_details from  "./order_details.js";
 import _orders from  "./orders.js";
 import _product_categories from  "./product_categories.js";
 import _products from  "./products.js";
+import _selectusercustomer from  "./selectusercustomer.js";
 import _users from  "./users.js";
 
 function initModels(sequelize) {
@@ -29,6 +30,7 @@ function initModels(sequelize) {
   const orders = _orders.init(sequelize, DataTypes);
   const product_categories = _product_categories.init(sequelize, DataTypes);
   const products = _products.init(sequelize, DataTypes);
+  const selectusercustomer = _selectusercustomer.init(sequelize, DataTypes);
   const users = _users.init(sequelize, DataTypes);
 
   order_details.belongsTo(orders, { as: "order", foreignKey: "order_id"});
@@ -48,10 +50,11 @@ function initModels(sequelize) {
     orders,
     product_categories,
     products,
+    selectusercustomer,
     users,
   };
 }
 
 const models = initModels(sequelize);
-export default  models
+export default models
 export {sequelize}

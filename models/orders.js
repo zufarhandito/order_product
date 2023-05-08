@@ -16,7 +16,7 @@ export default class orders extends Model {
       references: {
         model: 'users',
         key: 'id'
-      } 
+      }
     },
     totalproduct: {
       type: DataTypes.INTEGER,

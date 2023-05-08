@@ -27,7 +27,7 @@ route untuk products
 router.get('/products',productController.getProducts)
 router.get('/products/:id',productController.getProductById)
 router.post('/products',productController.upload,productController.createProduct)
-router.patch('/products/:id',productController.updateProduct)
+router.patch('/products/:id',productController.upload,productController.updateProduct)
 router.delete('/products/:id',productController.deleteProduct)
 
 /*
@@ -37,6 +37,7 @@ route untuk product category
 router.get('/categories',productCategoryController.getCategories)
 router.get('/categories/:id',productCategoryController.getCategoryById)
 router.post('/categories',productCategoryController.createCategory)
+router.patch('/categories/:id',productCategoryController.updateCategory)
 
 /*
 route untuk 

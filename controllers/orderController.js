@@ -1,8 +1,16 @@
 import models, {sequelize} from "../models/init-models.js"
+import order_details from "../models/order_details.js";
 
 const getOrders = async(req,res) => {
     try {
-        const data = await models.orders.findAll()
+        const data = await models.orders.findAll({
+            include: [
+                {
+                    model: models.order_details,
+                    as: "order_details"
+                }
+            ]
+        })
         if(data.length === 0) throw new Error ('Data tidak ditemukan');
 
         res.status(200).json({
@@ -20,7 +28,6 @@ const getOrders = async(req,res) => {
 
 const getOrderById = async(req,res) => {
     try {
-
         const data = await models.orders.findByPk(datanya)
         if(!data) throw new Error ("Data order yang anda cari tidak ditemukan")
 
@@ -66,31 +73,42 @@ const createOrder = async(req,res) => {
 }
 
 const updateOrder = async(req,res) => {
+    /*
+    Cari order menggunakan join
+    Cari product apa saja yang telah ada di order x
+    list product apa saja yang di request
+    cocokkan product
+        case 1 (jika req = dataDB)
+            update totalprice, totalproduct, quantity, dan product id
+        case 2 (jika req > dataDB)
+            tambahkan data
+        case 3 (jika req < dataDB)
+            delete data
+    */
     try {
-        const findId = await models.orders.findByPk(req.params.id);
-        if(!findId) throw new Error ("Data yang anda cari tidak ada");
-
-        const { user_id, totalproduct, totalprice } = req.body
-
-        await models.orders.update({
-            user_id: user_id,
-            totalproduct: totalproduct,
-            totalprice: totalprice
-        },{
-            where: {
-                id: req.params.id
-            }
+        const findOrder = await models.orders.findAll({
+            include: [
+                {
+                    model: models.order_details,
+                    as: "order_details",
+                    where: {
+                        order_id: req.params.id
+                    }
+                }
+            ]
         });
-    
-        res.status(200).json({
-            message: 'success',
-            data: findId
-        })
+        if(findOrder.length === 0) throw new Error ("Order tidak ditemukan");
+
+        const { product_id, quantity } = req.body
+
+        let totalPrice = findOrder.totalPrice;
+        let totalProduct = findOrder.totalPrice;
+
+        res.send(findOrder)
 
     } catch (error) {
         res.status(400).json({
-            message: error.message,
-            status: 400,
+            message: error.message
         })
     }
 }

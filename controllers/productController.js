@@ -1,4 +1,4 @@
-
+import fs from 'fs'
 import models from "../models/init-models.js";
 import path from 'path'
 import multer from "multer";
@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
         cb(null,'uploads/')
     },
     filename: (req,file,cb)=>{
-        cb(null,Date.now()+path.extname(file.originalname))
+        cb(null,'avatar_'+Date.now()+path.extname(file.originalname))
     }
 });
 
@@ -24,6 +24,7 @@ const upload = multer({
             return cb(null,true)
         }
         cb("Format file salah")
+        // return res.send('format file salah')
     }
 }).single("image")
 
@@ -89,13 +90,13 @@ const createProduct = async(req,res) => {
             description: description,
             category_id: category_id,
             price: price,
-            image: `${req.file.path}`
+            image: req.file.filename
         })
 
         res.status(201).json({
             message: 'success',
             status: 201,
-            // data: data
+            data: data
         })
     } catch (error) {
         res.status(400).json({
@@ -111,25 +112,28 @@ const updateProduct = async(req,res) => {
 
         const {name, description, category_id, price} = req.body
 
-        const {image} = findId
-        console.log(findId);
+        let getImage = findId.image
 
-        // const data = await models.products.update({
-        //     name: name,
-        //     description: description,
-        //     category_id: category_id,
-        //     price: price,
-        //     image: req.file.path
-        // },{
-        //     where: {
-        //         id: req.params.id
-        //     }
-        // })
+        if(req.file){
+            fs.unlinkSync('uploads/'+findId.image)
+            getImage = req.file.filename
+        }
+
+        const data = await models.products.update({
+            name: name,
+            description: description,
+            category_id: category_id,
+            price: price,
+            image: getImage
+        },{
+            where: {
+                id: req.params.id
+            }
+        })
 
         res.status(201).json({
             message: "success",
-            status: 201,
-            data: data
+            status: 201
         })
     } catch (error) {
         res.status(400).json({
@@ -143,6 +147,8 @@ const deleteProduct = async(req,res) => {
     try {
         const findId = await models.products.findByPk(req.params.id);
         if(!findId) throw new Error('Product tidak ditemukan')
+        
+        fs.unlinkSync('uploads/'+findId.image)
         
         await models.products.destroy({
             where: {

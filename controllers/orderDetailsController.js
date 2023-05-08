@@ -18,7 +18,12 @@ const getOrderDetails = async(req,res) => {
                 {
                     model: models.orders,
                     as: "order",
-                    attributes: ['id','totalproduct','totalprice']
+                    attributes: ['id','totalproduct','totalprice'],
+                    include: [{
+                        model: models.users,
+                        as: "user",
+                        attributes: ['name','description']
+                    }]
                 }
             ]
         })

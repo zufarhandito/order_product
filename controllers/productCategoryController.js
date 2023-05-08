@@ -37,10 +37,10 @@ const getCategoryById = async(req,res) => {
 
 const createCategory = async(req,res) => {
     try {
-
+        const {description,name} = req.body
         const data = await models.product_categories.create({
-            name: req.body.name,
-            description: req.body.description
+            name,
+            description
         })
 
         res.status(201).json({
@@ -55,8 +55,30 @@ const createCategory = async(req,res) => {
     }
 }
 
+const updateCategory = async(req,res) => {
+    try {
+        const findId = await models.product_categories.findByPk(req.params.id)
+        if(!findId) throw new Error('kategori tidak ditemukan')
+
+        const {name, description} = req.body
+        await models.product_categories.update({
+            name,
+            description
+        },{
+            where: {
+                id: req.params.id
+            }
+        })
+
+        res.send('sukses')
+    } catch (error) {
+        res.send(error.message)
+    }
+}
+
 export default {
     getCategories,
     getCategoryById,
-    createCategory
+    createCategory,
+    updateCategory
 }

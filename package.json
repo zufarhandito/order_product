@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "dataModelling": "sequelize-auto -o ./models -d eProduct -h localhost -l esm -u postgres -p 5432 -x root -e postgres -v true"
+    "dataModelling": "sequelize-auto -o ./models2 -d eProduct -h localhost -l esm -u postgres -p 5432 -x root -e postgres -v true"
   },
   "keywords": [],
   "author": "",
